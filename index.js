@@ -1,45 +1,50 @@
-const http = require("http");
+const express = require("express");
 const fs = require("fs");
+const app = express();
 
-const server = http.createServer((req, res) =>{
-    if (req.url === "/") {
-        res.writeHead(200, {"Content-Type": "text/html"});
-        fs.readFile("index.html", (err, data) => {
-            if (err) {
-                throw err
-            }
-            res.write(data);
-            res.end()
-        })
-    
-    } else if (req.url === "/about") {
-        res.writeHead(200, {"Content-Type": "text/html"});
-        fs.readFile("about.html", (err, data) => {
-            if (err) {
-                throw err;
-            }
-            res.write(data);
-            res.end();
-        })
-    } else if (req.url === "/contact-me") {
-        res.writeHead(200, {"Content-Type": "text/html"});
-        fs.readFile("contact-me.html", (err, data) => {
-            if (err) {
-                throw err;
-            }
-            res.write(data);
-            res.end();
-        })
-    } else {
-        res.writeHead(404, {"Content-Type": "text/html"});
-        fs.readFile("404.html", (err, data) => {
-            if (err) {
-                throw err;
-            }
-            res.write(data);
-            res.end();
-        })
-    }
+const port = 3000;
+
+app.get("/", (req, res) => {
+    fs.readFile("index.html", (err, data) => {
+        if (err) {
+            throw err;
+        }
+        res.write(data);
+        res.send();
+    } )
 });
 
-server.listen(3000);
+app.get("/contact-me", (req, res) => {
+    fs.readFile("contact-me.html", (err, data) => {
+        if (err) {
+            throw err;
+        }
+        res.write(data);
+        res.send();
+    } )
+});
+
+
+app.get("/about", (req, res) => {
+    fs.readFile("about.html", (err, data) => {
+        if (err) {
+            throw err;
+        }
+        res.write(data);
+        res.send();
+    } )
+});
+
+
+app.use((req, res) => {
+    fs.readFile("404.html", (err, data) => {
+        if (err) {
+            throw err;
+        }
+        res.write(data);
+        res.send();
+    } )
+});
+
+
+app.listen(port, () => console.log("server running.."));
